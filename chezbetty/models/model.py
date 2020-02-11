@@ -34,13 +34,16 @@ from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy.orm import synonym
 from sqlalchemy.sql.expression import or_, and_, func, exists
 from sqlalchemy.sql.functions import coalesce
-from zope.sqlalchemy import ZopeTransactionExtension
+from zope.sqlalchemy import register #from zope.sqlalchemy import ZopeTransactionExtension
 
 from .history_meta import Versioned, versioned_session
 
 from pyramid.security import Allow, Everyone
 
-DBSession = versioned_session(scoped_session(sessionmaker(extension=ZopeTransactionExtension())))
+#DBSession = versioned_session(scoped_session(sessionmaker(extension=ZopeTransactionExtension())))
+DBSession = scoped_session(sessionmaker(autoflush=False))
+register(DBSession)
+
 Base = declarative_base()
 
 class RootFactory(object):
