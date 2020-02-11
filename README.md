@@ -29,14 +29,22 @@ development environment set up, do the following:
 
         git clone https://github.com/um-cseg/chez-betty.git
 
-2. Install system dependencies:
+2. Install python3
+
+        You may have to run "python3" instead of "python" in the next steps if "python" is configured to run python2.
+
+3. Install system dependencies:
 
         # Ubuntu 15.10
         sudo apt-get install postgresql postgresql-server-dev-9.4 libjpeg-dev
         # Ubuntu 16.10
         sudo apt-get install postgresql postgresql-server-dev-9.5 libjpeg-dev
+        # Ubuntu 18.04
+        sudo apt-get install postgresql postgresql-server-dev-10 libjpeg-dev
+        # Ubuntu 19.10
+        sudo apt-get install postgresql postgresql-server-dev-11 libjpeg-dev
 
-1. Setup virtualenv with Python3:
+4. Setup virtualenv with Python3:
 
         cd chez-betty
 
@@ -56,7 +64,7 @@ development environment set up, do the following:
 
         source venv/bin/activate
 
-2. Install the dependencies:
+5. Install the dependencies:
 
         # Note, this step *must* be run before setup.py. The latter will use
         # easy_install to install requirements instead of pip, which will
@@ -64,30 +72,33 @@ development environment set up, do the following:
         # directory of the project.
         pip install -e .
 
-2. Setup the development environment
+6. Setup the development environment
 
         python setup.py develop
 
-3. Update `development.ini` to set config information and passwords.
+7. Update `development.ini` to set config information and passwords.
 
         cp development.ini.example development.ini
         [edit development.ini]
+        
+    You will likely need to create a user for postgres. Remember the <username> and <password> because you'll need them for the next step. Do so by following the step in this link:
+        https://www.a2hosting.com/kb/developer-corner/postgresql/managing-postgresql-databases-and-users-from-the-command-line
 
     You will want to use a postgres database. Likely, your development.ini file
-    will need to be updated to have this for the database:
+    will need to be updated to have this for the database where <username> and <password> are the ones used in the previous step:
 
-        sqlalchemy.url = postgresql://bradjc@localhost:5432/chezbetty
+        sqlalchemy.url = postgresql://<username>:<password>@localhost:5432/chezbetty
 
     To create that database, do something like:
 
         psql
         > create database chezbetty;
 
-3. Setup the database:
+8. Setup the database:
 
         python chezbetty/initializedb.py development.ini
 
-4. Install bower and bower-install
+9. Install bower and bower-install
 
         # Note: Distro copies of node tend to fall behind really quickly.
         # You are better off using a copy of node/npm installed directly:
@@ -95,11 +106,11 @@ development environment set up, do the following:
         # https://github.com/npm/npm
         sudo npm install bower bower-installer -g
 
-5. Get all css/js dependencies
+10. Get all css/js dependencies
 
         bower-installer
 
-4. Run the webserver:
+11. Run the webserver:
 
         pserve development.ini
         # n.b. pserve will be in your path if your virtualenv is active
